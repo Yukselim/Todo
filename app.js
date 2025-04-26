@@ -6,12 +6,19 @@ toggleButton.addEventListener('click', () => {
 
 const divText = document.querySelector(".todo-input-group");
 const inputText = document.querySelector("#todo-input");
+const todoContainer = document.querySelector(".todo-container");
 const todoList = document.querySelector("#todo-list");
 divText.addEventListener("submit", function(e) {
  const newTodo = inputText.value.trim();
- addNewTodo(newTodo);
+ if(newTodo === "")
+    showAlert("danger","Geben Sie eine Todo, bitte!");
+else
+    {
+        showAlert("success", "Todo wurde erfolgreich erstellt");
+        addNewTodo(newTodo);
+    }
  e.preventDefault();
- //console.log(newTodo);
+ 
 });
 
 function addNewTodo(newTodo)
@@ -31,3 +38,17 @@ function addNewTodo(newTodo)
     
     todoList.appendChild(listItem);   // Dann das <li> in die Liste
 };
+
+function showAlert(type, message)
+{
+    const alert = document.createElement("div");
+    alert.className = `alert alert-${type}`;
+    alert.textContent = message;
+    //console.log(alert);
+    todoContainer.appendChild(alert);
+
+    setTimeout(() => {
+        alert.remove();
+    }, 1000);
+}
+
