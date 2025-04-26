@@ -4,6 +4,7 @@ toggleButton.addEventListener('click', () => {
   toggleButton.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
 });
 
+document.addEventListener("DOMContentLoaded", loadTodoListUI);
 const divText = document.querySelector(".todo-input-group");
 const inputText = document.querySelector("#todo-input");
 const todoContainer = document.querySelector(".todo-container");
@@ -15,13 +16,15 @@ divText.addEventListener("submit", function(e) {
 else
     {
         showAlert("success", "Todo wurde erfolgreich erstellt");
-        addNewTodo(newTodo);
+        addNewTodoUI(newTodo);
+        addTodoLocalStorage(newTodo);
+        inputText.value = "";
     }
  e.preventDefault();
  
 });
 
-function addNewTodo(newTodo)
+function addNewTodoUI(newTodo)
 {
     const listItem = document.createElement("li");
     listItem.className = "list-group-item d-flex justify-content-between align-items-center";
@@ -51,4 +54,26 @@ function showAlert(type, message)
         alert.remove();
     }, 1000);
 }
+ function getStorage()
+ {
+    let todos;
+    if(localStorage.getItem("todos") === null)
+        todos = [];
+    else
+        todos = JSON.parse(localStorage.getItem("todos"));
 
+    return todos;
+ };
+function addTodoLocalStorage(newTodo)
+{
+    let todos = getStorage();
+    todos.push(newTodo);
+    localStorage.setItem("todos", JSON.stringify(todos));
+};
+function loadTodoListUI() {
+    let todos = getStorage();
+    todos.forEach(function(todo)
+    {
+            addNewTodoUI(todo);
+    });
+}
