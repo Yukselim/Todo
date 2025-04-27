@@ -5,6 +5,7 @@ toggleButton.addEventListener('click', () => {
 });
 
 document.addEventListener("DOMContentLoaded", loadTodoListUI);
+document.addEventListener("click", deleteTodo)
 const divText = document.querySelector(".todo-input-group");
 const inputText = document.querySelector("#todo-input");
 const todoContainer = document.querySelector(".todo-container");
@@ -54,16 +55,7 @@ function showAlert(type, message)
         alert.remove();
     }, 1000);
 }
- function getStorage()
- {
-    let todos;
-    if(localStorage.getItem("todos") === null)
-        todos = [];
-    else
-        todos = JSON.parse(localStorage.getItem("todos"));
-
-    return todos;
- };
+ 
 function addTodoLocalStorage(newTodo)
 {
     let todos = getStorage();
@@ -76,4 +68,31 @@ function loadTodoListUI() {
     {
             addNewTodoUI(todo);
     });
+}
+function getStorage()
+ {
+    let todos;
+    if(localStorage.getItem("todos") === null)
+        todos = [];
+    else
+        todos = JSON.parse(localStorage.getItem("todos"));
+
+    return todos;
+ };
+function deleteTodo(e)
+{
+    if(e.target.classList.contains("fa-remove"))
+    {
+        e.target.closest("li").remove();
+        deleteTodoFromStorage( e.target.closest("li").textContent);
+    }
+}
+
+function deleteTodoFromStorage(deleteTodo){
+    const todos = getStorage();
+    todos.forEach(function(todo,index){
+        if(todo === deleteTodo)
+            todos.splice(index,1);
+    });
+    localStorage.setItem("todos", JSON.stringify(todos));
 }
